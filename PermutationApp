@@ -1,0 +1,168 @@
+/**
+ * Created by sheel.pandey on 6/9/2017.
+ */
+import java.io.*;
+import java.util.*;
+
+class InputChar {
+    private char character;
+    private int count;
+
+    public InputChar(char character, int count) {
+        this.character = character;
+        this.count = count;
+    }
+
+    public char getCharacter() {
+        return character;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public boolean equals(Object obj) {
+        InputChar inputChar = (InputChar)obj;
+        return this.character == inputChar.character;
+    }
+}
+
+class Permutations {
+
+    private String input;
+    private long rank;
+    private long currentRank;
+    private int inputLength;
+    private LinkedHashMap<Character, InputChar> charMap;
+    private StringBuffer nthPermutation;
+
+    public Permutations(String input, long rank) {
+        this.input = input;
+        this.rank = rank;
+        this.inputLength = input.length();
+        this.currentRank = 0;
+        charMap = new LinkedHashMap<>();
+        nthPermutation = new StringBuffer("");
+    }
+
+    public String nthPermutation() {
+        String sortedInput = sortedInput();
+        setCharMap(sortedInput);
+
+        while (nthPermutation.length() < inputLength) {
+            nthPermutation.append(nextChar());
+        }
+
+        return nthPermutation.toString();
+    }
+
+    private String sortedInput() {
+        char[] inputChar = input.toCharArray();
+        Arrays.sort(inputChar);
+        return new String(inputChar);
+    }
+
+    private void setCharMap(String sortedInput) {
+        for (int i=0; i < sortedInput.length(); i++) {
+
+            char character = sortedInput.charAt(i);
+            InputChar inputChar = charMap.get(character);
+
+            if (inputChar == null)
+                inputChar = new InputChar(character, 1);
+            else
+                inputChar.setCount(inputChar.getCount() + 1);
+
+            charMap.put(character, inputChar);
+        }
+    }
+
+    private char nextChar() {
+        int i = 0;
+        int baseFactNum = inputLength - nthPermutation.length() - 1;
+
+        long baseFact = factorial(baseFactNum);
+        long nextRank = currentRank;
+
+        ArrayList<InputChar> charList = new ArrayList<>(charMap.values());
+        int charListSize = charList.size();
+        InputChar inputChar = null;
+
+        for (; i < charListSize; i++) {
+
+            inputChar = charList.get(i);
+            nextRank += getRank(baseFact, i);
+
+            if (nextRank >= rank)
+                break;
+
+            currentRank = nextRank;
+        }
+
+        int newCharCount = inputChar.getCount() - 1;
+        char nextCharacter = inputChar.getCharacter();
+
+        inputChar.setCount(newCharCount);
+
+        if (newCharCount == 0)
+            charMap.remove(nextCharacter);
+
+        return nextCharacter;
+    }
+
+    private long getRank(long baseFact, int currentIndex) {
+        ArrayList<InputChar> charList = new ArrayList<>(charMap.values());
+        InputChar inputChar = null;
+        int charCount = 0;
+
+        for (int i=0; i < charList.size(); i++) {
+            inputChar = charList.get(i);
+            charCount = inputChar.getCount();
+
+            if (i == currentIndex)
+                charCount--;
+
+            baseFact = baseFact / factorial(charCount);
+        }
+
+        return baseFact;
+    }
+
+    private static long factorial(int num) {
+        if (num <= 1)
+            return 1;
+        else
+            return num * factorial(num-1);
+    }
+}
+
+public class PermutationApp {
+
+    //static String inputFile = "permutationInput.txt";
+    static int indexZero = 0;
+    static int indexOne = 1;
+
+    public static void main(String ...arr) throws IOException {
+
+        //BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(new File(inputFile))));
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        int testCases = Integer.parseInt(br.readLine());
+        String[] output = new String[testCases];
+        Permutations permutations = null;
+
+        for (int i=0; i < testCases; i++) {
+            String[] input = br.readLine().split(" ");
+            permutations = new Permutations(input[indexZero], Long.parseLong(input[indexOne]));
+            output[i] = permutations.nthPermutation();
+        }
+
+        for (int i=0; i < testCases; i++) {
+            System.out.println(output[i]);
+        }
+    }
+}
