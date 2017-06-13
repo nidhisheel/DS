@@ -1,0 +1,71 @@
+package com.sheel.practice;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Scanner;
+
+public class MinimunSum {
+
+	static int findMinimumElement(int[] ar1) {
+		int tmp = ar1[0];
+		int min = 0;
+		int i = 0, index = 0;
+		for (i = 1; i < ar1.length; i++) {
+			if (tmp < ar1[i]) {
+				min = tmp;
+
+			} else {
+				min = ar1[i];
+				tmp = ar1[i];
+
+			}
+			// System.out.println(min);
+		}
+		return min;
+	}
+
+	static int twinArrays(int[] ar1, int[] ar2) {
+		int sum = 0, j = 1;
+		int i = 0;
+		int temp = ar1[0];
+		HashMap<Integer, Integer> map = new HashMap<>();
+		HashMap<Integer, Integer> map1 = new HashMap<>();
+		for (; i < ar1.length && i < ar2.length; i++) {
+			map.put(ar1[i], i);
+			map1.put(ar2[i], i);
+
+		}
+		int min = findMinimumElement(ar1);
+
+		int min1 = findMinimumElement(ar2);
+		Arrays.sort(ar1);
+		Arrays.sort(ar2);
+
+		i = 0;
+		if (map.get(min) != map1.get(min1)) {
+			sum = min + min1;
+		} else {
+			sum = ar1[i + 1] + ar2[i];
+		}
+
+		System.out.println(sum);
+
+		return sum;
+	}
+
+	public static void main(String[] args) {
+		Scanner in = new Scanner(System.in);
+		int n = in.nextInt();
+		int[] ar1 = new int[n];
+		for (int ar1_i = 0; ar1_i < n; ar1_i++) {
+			ar1[ar1_i] = in.nextInt();
+		}
+		int[] ar2 = new int[n];
+		for (int ar2_i = 0; ar2_i < n; ar2_i++) {
+			ar2[ar2_i] = in.nextInt();
+		}
+		int result = twinArrays(ar1, ar2);
+
+		System.out.println(result);
+	}
+}
