@@ -1,0 +1,63 @@
+package com.sheel.practice;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.Scanner;
+
+public class Practice {
+	public static void main(String[] args) {
+		HashMap<Integer,LinkedList<Integer>>mapx=new HashMap<>();
+		HashMap<Integer,LinkedList<Integer>>mapy=new HashMap<>();
+		int len=0;
+        Scanner in = new Scanner(System.in);
+        int n = in.nextInt();
+        int k = in.nextInt();
+        int m = in.nextInt();
+        LinkedList<Integer> adj[]=new LinkedList[k];;
+        LinkedList<Integer>l1=new LinkedList<>();
+        for(int a0 = 0; a0 < k; a0++){
+            int x = in.nextInt();
+            int y = in.nextInt();
+            adj[a0]=new LinkedList<Integer>();
+            if(!adj[a0].contains(x))
+            {
+            	l1.add(x);
+            l1.add(y);
+            mapx.put(x,l1);
+            }
+          
+        }
+        System.out.println("mapx"+mapx);
+        int[] a = new int[m];
+        for(int a_i=0; a_i < m; a_i++){
+            a[a_i] = in.nextInt();
+        }
+        if(m/2!=0)
+        	len=m/2-1;
+        else
+        	len=m/2+1;
+        for(int j=0;j<len;j++)
+        {
+        	System.out.println("a[j"+a[j]+"a"+a[m-1-j]+"m"+m);
+        	if(!(a[j]==a[m-1-j]))
+        		if(a[j]<a[m-1-j])
+        		{System.out.println("check"+a[j]+"a"+a[m-1-j]+"m"+m);
+        		System.out.println("x"+mapx.containsKey(a[j])+""+((mapx.containsValue(a[j]) || mapx.containsValue(a[m-1-j]))||(mapy.containsValue(a[j]) || mapy.containsValue(a[m-1-j]))));
+        			if((mapx.containsKey(a[j]) /*|| mapx.containsValue(a[m-1-j])*/)&&( mapy.containsValue(a[m-1-j])))
+        			{
+        			
+        				a[m-1-j]=a[j];
+        				System.out.println("a[m-1]"+a[m-1-j]);
+        			}
+        		}
+        		
+        }
+        
+        for(int a_i=0; a_i < m; a_i++){
+        	System.out.print(a[a_i] );
+            
+        }
+    }
+
+}
