@@ -1,0 +1,175 @@
+package com.sheel.practice;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Set;
+
+public class Practice {
+	
+	public static boolean find(int j,int m,Set<Integer> a[])
+	{
+		for(int i=0;i<a.length-1;i++)
+		{
+			System.out.println("--a"+i+"j"+j+a[i].contains(j)+a[i].contains(m)+"m"+m);
+			if(a[i].contains(j) && a[i].contains(m))
+			{
+				m=j;
+				return true;
+			}
+			if(a[i].contains(j) && !(a[i].contains(m)))
+				return false;
+			
+		}
+		return false;
+		
+	}
+	@SuppressWarnings("unchecked")
+	public static void main(String[] args) {
+
+		Scanner in = new Scanner(System.in);
+
+		System.out.println("Enter value for number of digit : ");
+		int n = in.nextInt();
+		System.out.println("Enter value for number of pair : ");
+		int k = in.nextInt();
+		System.out.println("Input string : ");
+		int m = in.nextInt();
+		int length=0;
+		Set set1=null;
+		Set set=null;
+		Set<Integer> adj[]=new HashSet[k/2];
+		int j=0;
+	
+		for (int i = 0; i < k; i++) {
+			int x = in.nextInt();
+			int y = in.nextInt();
+
+		if(i==0)
+		{
+				 set=new HashSet<Integer>();
+				set.add(x);
+				set.add(y);
+				adj[j]=set;
+				System.out.println("pairList"+adj[j]);
+			}
+			
+			else
+			{
+				if(set.contains(x) ||set.contains(y))
+				{
+					
+					set.add(x);
+					set.add(y);
+					System.out.println("set---"+set);
+					adj[j]=set;
+					System.out.println(j+"---"+adj[j]);
+					
+				}
+				else
+				{boolean flag=false;
+					 set=new HashSet<Integer>();
+		
+					set.add(x);
+					set.add(y);
+					System.out.println("set1"+set+"x"+x+"y"+y);
+					for(int a=0;a<j;a++)
+					{
+						if(adj[a].contains(x)|| adj[a].contains(y))
+						{System.out.println("so---for");
+							adj[a].add(x);
+						adj[a].add(y);
+						flag=true;
+						}
+					}
+					j++;
+					if(!flag)
+				adj[j]=set;
+				System.out.println(j+"last"+adj[j]);
+				
+				
+				}
+			
+				
+			
+					
+			}
+
+	
+	/*		if (masterList.size() == 0) {
+				Set<Integer> tempSet = new HashSet<Integer>();
+				tempSet.add(x);
+				tempSet.add(y);
+				masterList.add(tempSet);
+			} else {
+				Set<Integer> newSet = null;
+				for (Set<Integer> array : masterList) {
+					if (array.contains(x) || array.contains(y)) {
+						array.add(x);
+						array.add(y);
+					} else {
+						newSet = new HashSet<Integer>();
+						newSet.add(x);
+						newSet.add(y);
+					}
+				}
+				if (newSet != null)
+					masterList.add(newSet);
+
+			}
+		}
+		System.out.println("Ended loop"+masterList);*/
+		
+	}
+		
+		
+		System.out.println("Ended loop"+adj.length+"set1"+set1);
+		for(int b=0;b<adj.length;b++)
+		{
+			System.out.println("adj---"+adj[b]);
+		}
+		
+		 int[] a = new int[m];
+		 ArrayList<Integer> ar=new ArrayList<>();
+	        for(int i=0; i < m; i++){
+	        	
+	            a[i] = in.nextInt();
+	        }
+	        for(int l=0;l<m;l++)
+	        {boolean flag=false;
+        	int len=0;
+	            if(m/2==0)
+	            {
+	            	len=m/2+1;
+	            }
+	            else
+	            	len=m/2;
+	            if(a[l]!=a[m-1-l])
+	            	while(!flag)
+	            {
+	            	flag=find(a[l], a[m-l-1], adj);
+	            	if(flag)
+	            	{
+	            		ar.add(0,a[l]);
+	            	   ar.add(1,a[l]);
+	            	}
+	            	else
+	            	{m=m-1;
+	            		
+	            	}
+	            	  
+	            }
+	 
+			 
+				
+			}
+			
+		
+		for(int b=0;b<m-1;b++)
+		{
+			System.out.print("adj---"+a[b]);
+		}
+}
+	
+	
+}
