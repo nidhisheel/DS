@@ -1,46 +1,58 @@
-import javax.swing.text.html.HTMLDocument;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
  * Created by sheel.pandey on 6/27/2017.
  */
 public class WorkComplete {
-    /*class work
-    {int workId;
-    String skill;
-     int priority;
-     int timeRequired;
-     public work(int workid,int priority,int timeRequired,String skill)
-     {
-         this.workId=workid;
-         this.priority=priority;
-         this.timeRequired=timeRequired;
-         this.skill=skill;
-     }
 
-    }*/
    static String skill,designation;
     static int count=0;
+
    static int priority,timeRequired,jobId;
+   public static String [] outpuT(String input,String skill)
+   {
+       return null;
+   }
     public static String[] warehouseScalability(String[] input1,String[] input2)
     {
-        HashMap<String,String> skillMapped=new HashMap<>();
+        HashMap<String,ArrayList> skillMapped=new HashMap<>();
         HashMap<String,ArrayList> mappedPriority=new HashMap<>();
+        HashMap<String,ArrayList>mappedTime=new HashMap<>();
         HashMap<Integer,Integer> priorityId=new HashMap<>();
         String output[]=new String[input1.length];
+        ArrayList<String> designations=new ArrayList<>();
+        String skillArray[]=new String[input1.length];
         for(int i=0;i<input1.length;i++)
         {
 
             String[] input=input1[i].split("#");
-            skill = input[0];
-            designation = input[1];
-            if(!skillMapped.containsKey(skill))
-            skillMapped.put(designation,skill);
+
+            designation = input[0];
+            skill = input[1];
+            skillArray[i]=skill;
+
+            if(skillMapped.containsKey(skill)) {
+                System.out.println("--contains skill"+skill);
+               ArrayList value=skillMapped.get(skill);
+                value.add(designation);
+                skillMapped.put(skill, value);
+
+            }
+            else {
+                designations=new ArrayList<>();
+                designations.add(designation);
+                skillMapped.put(skill, designations);
+           //     skills.add(skill);
+
+            }
+
             System.out.println("skill" + skill + "designation" + designation);
+            System.out.println("---"+skillMapped);
 
         }
-        System.out.println("---"+skillMapped);
+
         ArrayList<Integer> priorityList=new ArrayList<>();
         ArrayList<Integer> timeRequireds=new ArrayList<>();
         for(int i=0;i<input2.length;i++)
@@ -48,37 +60,107 @@ public class WorkComplete {
             skill=input[0];
 
             priority=Integer.parseInt(input[1]);
-            priorityList.add(priority);
-            timeRequired=Integer.parseInt(input[2]);
-            timeRequireds.add(timeRequired);
-            jobId=Integer.parseInt(input[3]);
-            if(!mappedPriority.containsKey(skill))
-                mappedPriority.put(skill,priorityList);
-            priorityId.put(priority,jobId);
+            System.out.println("--priority"+priority);
 
-            System.out.println("---"+priorityId);
-            System.out.println("skill" + skill + "designation" + designation+"o"+priority+" "+timeRequired+"jobId"+mappedPriority);
+            timeRequired=Integer.parseInt(input[2]);
+
+            jobId=Integer.parseInt(input[3]);
+            if(mappedTime.containsKey(skill))
+            {
+                ArrayList times=mappedTime.get(skill);
+                System.out.println("times---"+times);
+
+                times.add(timeRequired);
+                mappedTime.put(skill,times);
+
+            }
+            else
+            {
+                timeRequireds=new ArrayList<>();
+                timeRequireds.add(timeRequired);
+                mappedTime.put(skill,timeRequireds);
+            }
+            if(mappedPriority.containsKey(skill))
+            {
+                ArrayList values=mappedPriority.get(skill);
+                values.add(priority);
+                mappedPriority.put(skill,values);
+
+            }
+            else
+            {
+                priorityList=new ArrayList<>();
+                priorityList.add(priority);
+                mappedPriority.put(skill,priorityList);
+            }
+
+            priorityId.put(timeRequired,jobId);
+
+
+            System.out.println("skill" + skill +mappedTime+" "+timeRequired+"jobId"+mappedPriority);
 
         }
         Arrays.sort(priorityList.toArray());
-       mappedPriority.put(designation,priorityList);
-        System.out.println("---"+mappedPriority);
+
+        System.out.println("---"+priorityList);
         Object value=null;
-        for (Map.Entry<String, ArrayList> e : mappedPriority.entrySet()) {
+
+
             String s=new String();
-            ArrayList<Integer>as=e.getValue();
-            Iterator<Integer> iter=as.iterator();
-            while(iter.hasNext()) {
-                System.out.println("value" + iter.next());
+
+
+       //     Arrays.sort(as.toArray());
+
+            for(int i=0;i<input1.length-1;i++) {
+                int maxTime=0,minTime=0;
+                int secondMax=0,secondMin=0;
+
+              //  System.out.println("value" + iter.next());
               // if(priorityId.containsKey(e.getValue()))
-                    value = priorityId.get(iter.next());
-                    s=e.getKey()+"#"+value;
+                String valu=skillArray[i];
+                System.out.println("---value"+valu);
+                    value = priorityId.get(valu);
+                    ArrayList<String> workSkill=skillMapped.get(valu);
+                   ArrayList<Integer> list=mappedTime.get(valu);
+                System.out.println("---SkillMapped"+list);
 
-                System.out.println(e.getKey() + "e.getValue" +value);
+                Iterator iterator=list.iterator();
+
+                    while (iterator.hasNext()) {
+                        int y = (int) iterator.next();
+                        if (y > maxTime) {
+                            secondMax = maxTime;
+                            maxTime = y;
+                            minTime=y;
+
+                        } else if (y > secondMax && y>minTime) {
+                            secondMax = y;
+                           // minTime=secondMax;
+
+                        }
+                        else {
+                            minTime=y;
+                        }
+
+                }
+                if(workSkill.size()>1)
+                {
+                  s=  workSkill.get(0);
+                }
+                s=s+"#"+mappedTime.get(maxTime)+mappedTime.get(secondMax);
+                System.out.println("--maxTime"+maxTime+"minTime"+minTime+"sec"+secondMax);
+
+
+
+
+                System.out.println("-----"+s);
             }
-            output[count++]=s;
 
-        }
+
+            output[count]=s;
+count++;
+
+
 return output;
     }
 
